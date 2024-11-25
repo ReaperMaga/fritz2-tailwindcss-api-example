@@ -1,4 +1,4 @@
-package app
+package com.github.reapermaga.fritz2
 
 import dev.fritz2.core.RenderContext
 import dev.fritz2.core.RootStore
@@ -7,7 +7,6 @@ import dev.fritz2.core.render
 import dev.fritz2.core.storeOf
 import dev.fritz2.remote.decoded
 import dev.fritz2.remote.http
-import dev.fritz2.routing.Router
 import dev.fritz2.routing.routerOf
 import kotlinx.coroutines.Job
 import kotlinx.serialization.Serializable
