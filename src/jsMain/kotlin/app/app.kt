@@ -7,6 +7,8 @@ import dev.fritz2.core.render
 import dev.fritz2.core.storeOf
 import dev.fritz2.remote.decoded
 import dev.fritz2.remote.http
+import dev.fritz2.routing.Router
+import dev.fritz2.routing.routerOf
 import kotlinx.coroutines.Job
 import kotlinx.serialization.Serializable
 
@@ -32,25 +34,76 @@ object TestApiStore : RootStore<Todo?>(null, job = Job()) {
         return@handle resp.decoded<Todo>()
     }
 }
-fun main() {
 
+val router = routerOf("first")
+fun main() {
     render {
-        div("w-screen h-screen bg-red-500") {
-            h1("text-white py-4 text-4xl") {
-                +"Hello, "
-                nameStore.data.renderText()
+        navBar()
+        router.data.render { site ->
+            when (site) {
+                "first" -> firstSite()
+                "second" -> secondSite()
+                else -> div { +"Unknown site" }
             }
-            testComponent()
-            h1("text-white py-4 text-4xl") {
-                +"Data from API: "
-                TestApiStore.data.render {
-                   +(it?.title ?: "No data")
+        }
+    }
+}
+
+fun RenderContext.navBar() {
+    div("w-screen h-20 bg-green-600 text-white flex gap-5 items-center justify-center text-2xl") {
+        navBarLink("First site", "first")
+        navBarLink("Second site", "second")
+    }
+}
+
+fun RenderContext.navBarLink(text: String, site: String) {
+    a("cursor-pointer transition hover:text-gray-300") {
+        +text
+        clicks handledBy {
+            router.navTo(site)
+        }
+    }
+}
+
+fun RenderContext.secondSite() {
+    val tabStore = storeOf("Tab 1", job = Job())
+    div("w-screen h-1/2 bg-blue-500 flex gap-2") {
+        button(ButtonType.PRIMARY, "Tab 1", onClick = {
+            tabStore.update("Tab 1")
+        })
+        button(ButtonType.SECONDARY, "Tab 2", onClick = {
+            tabStore.update("Tab 2")
+        })
+        tabStore.data.render {
+            if(it == "Tab 1") {
+                div("text-white py-4 text-4xl") {
+                    +"Tab 1"
+                }
+            } else {
+                div("text-white py-4 text-4xl") {
+                    +"Tab 2"
                 }
             }
-            button(ButtonType.SECONDARY, "Request data", onClick = {
-                TestApiStore.retrieve(2)
-            })
         }
+    }
+}
+
+fun RenderContext.firstSite() {
+    div("w-screen h-screen bg-red-500") {
+        h1("text-white py-4 text-4xl") {
+            +"Hello, "
+            nameStore.data.renderText()
+        }
+        testComponent()
+        h1("text-white py-4 text-4xl") {
+            +"Data from API: "
+            TestApiStore.data.render {
+                +(it?.title ?: "No data")
+            }
+        }
+        button(ButtonType.SECONDARY, "Request data", onClick = {
+            TestApiStore.retrieve(2)
+        })
     }
 }
 
