@@ -1,5 +1,7 @@
 import com.google.devtools.ksp.gradle.KspTaskMetadata
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
+import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -58,8 +60,8 @@ kotlin {
     }
 }
 
-rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin> {
-    rootProject.the<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension>().lockFileDirectory = project.rootDir.resolve("/")
+rootProject.plugins.withType<YarnPlugin> {
+    rootProject.the<YarnRootExtension>().lockFileDirectory = project.rootDir.resolve("/")
 }
 
 
