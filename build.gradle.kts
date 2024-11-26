@@ -58,6 +58,9 @@ kotlin {
     }
 }
 
+rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin> {
+    rootProject.the<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension>().lockFileDirectory = project.rootDir.resolve("/")
+}
 
 
 // KSP support for Lens generation
