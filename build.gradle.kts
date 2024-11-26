@@ -30,7 +30,13 @@ kotlin {
             }
         }
         val jvmMain by getting {
+            tasks.withType<Jar> {
+                manifest {
+                    attributes["Main-Class"] = "com.github.reapermaga.fritz2.MainKt"
+                }
+            }
             dependencies {
+
             }
         }
         val jsMain by getting {
@@ -51,6 +57,8 @@ kotlin {
         }
     }
 }
+
+
 
 // KSP support for Lens generation
 dependencies.kspCommonMainMetadata(libs.fritz2.lenses)
